@@ -17,13 +17,19 @@ async function startNewGame() {
 async function makeGuess() {
   const guessLetter = document.querySelector(".letter").value;
   if (guessLetter === "") return;
-  const token = document.querySelector(".token").value;
+  let token = document.querySelector(".token").value;
   const url = `${baseUrl}?token=${token}&letter=${guessLetter}`;
   const response = await fetch(url, {
     method: "PUT",
   });
   const json = await response.json();
   console.log(json);
+  token = json.token;
+  let hangmanWord = document.querySelector(".hangman-word");
+  let result = document.createTextNode(json.hangman);
+  if (json.correct === true) {
+    hangmanWord.appendChild(result);
+  }
 }
 
 btnNewGame.addEventListener("click", startNewGame);
