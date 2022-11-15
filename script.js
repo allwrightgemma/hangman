@@ -2,6 +2,8 @@
 const btnNewGame = document.getElementById("new-game");
 const baseUrl = "http://hangman-api.herokuapp.com/hangman";
 const btnGuess = document.getElementById("guess");
+let remainingGuesses = 7;
+let attempts = 0;
 
 async function startNewGame() {
   const response = await fetch(baseUrl, {
@@ -24,12 +26,22 @@ async function makeGuess() {
   });
   const json = await response.json();
   console.log(json);
-  token = json.token;
+
   let hangmanWord = document.querySelector(".hangman-word");
   let result = document.createTextNode(json.hangman);
   if (json.correct === true) {
     hangmanWord.appendChild(result);
   }
+  token = json.token;
+
+  let remainingDisplay = document.querySelector(".remaining");
+  remainingGuesses--;
+  remainingDisplay.innerText = `${remainingGuesses}`;
+
+  let attemptsDisplay = document.querySelector(".attempts");
+  attempts++;
+
+  attemptsDisplay.innerText = `Attempts: ${attempts}`;
 }
 
 btnNewGame.addEventListener("click", startNewGame);
