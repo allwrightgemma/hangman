@@ -2,16 +2,24 @@
 const btnNewGame = document.getElementById("new-game");
 const baseUrl = "http://hangman-api.herokuapp.com/hangman";
 const btnGuess = document.getElementById("guess");
+const letterInput = document.getElementById("letter");
+let currentAnswer = [];
+let remainingGuesses = 7;
 
 async function startNewGame() {
   const response = await fetch(baseUrl, {
     method: "POST",
   });
   const json = await response.json();
-  console.log(json);
+  console.log("Answer", json);
   const hiddenToken = document.querySelector(".token");
   hiddenToken.value = json.token;
   btnNewGame.hidden = true;
+  currentAnswer = json.hangman.split("");
+  //get remainingDisplay and set to 7
+  //get console input and unhide
+  //set hangmanWord to current answer
+  //get attemptDisplay and make equal to empty string
 }
 
 async function makeGuess() {
@@ -26,15 +34,23 @@ async function makeGuess() {
   console.log(json);
 
   let hangmanWord = document.querySelector(".hangman-word");
-  let result = document.createTextNode(json.hangman);
+  let result = json.hangman;
+
   let attemptsDisplay = document.querySelector(".attempts");
   let attemptsSpan = document.createElement("span");
   let attemptsContent = document.createTextNode(guessLetter);
   let remainingDisplay = document.querySelector(".remaining");
-  let remainingGuesses = 7;
 
   if (json.correct === true) {
-    hangmanWord.appendChild(result);
+    const word = result.split("");
+
+    for (let i = 0; i < word.length; i++) {
+      if (word[i] !== "_" && currentAnswer[i] === "_") {
+        currentAnswer[i] = word[i];
+      }
+    }
+    hangmanWord.textContent = currentAnswer.join("");
+
     attemptsSpan.classList.add("correct");
   } else {
     attemptsSpan.classList.add("wrong");
@@ -42,14 +58,39 @@ async function makeGuess() {
   token = json.token;
 
   remainingGuesses--;
-  remainingDisplay.innerText = `${remainingGuesses}`;
+  remainingDisplay.innerText = remainingGuesses;
 
   attemptsSpan.appendChild(attemptsContent);
   attemptsDisplay.append(attemptsSpan);
+  if (remainingGuesses === 6) {
+    getSolution();
+  }
+}
+
+async function getSolution() {
+  const solutionToken = document.querySelector(".token").value;
+  const solutionUrl = `${baseUrl}?token=${solutionToken}`;
+
+  const solutionResponse = await fetch(solutionUrl, {
+    method: "GET",
+  });
+  const solutionJson = await solutionResponse.json();
+  console.log(solutionJson);
+  const hangmanWord = document.querySelector(".hangman-word");
+  hangmanWord.textContent = solutionJson.solution;
+  const input = document.querySelector(".console");
+  input.hidden = true;
+  btnNewGame.hidden = false;
 }
 
 btnNewGame.addEventListener("click", startNewGame);
+
 btnGuess.addEventListener("click", makeGuess);
+letterInput.addEventListener("keypress", (e) => {
+  if (e.key === "enter") {
+    makeGuess();
+  }
+});
 
 // want to update the hangman word with the letters
 // continue to add more than one correct or wrong class
