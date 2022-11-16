@@ -16,10 +16,18 @@ async function startNewGame() {
   hiddenToken.value = json.token;
   btnNewGame.hidden = true;
   currentAnswer = json.hangman.split("");
-  //get remainingDisplay and set to 7
-  //get console input and unhide
-  //set hangmanWord to current answer
+  const remainingDisplay = document.querySelector(".remaining");
+  remainingGuesses = 7;
+  remainingDisplay.innerText = remainingGuesses;
+  const input = document.querySelector(".console");
+  input.hidden = false;
+  const hangmanWord = document.querySelector(".hangman-word");
+  currentAnswer = [];
+  hangmanWord.textContent = currentAnswer;
+
   //get attemptDisplay and make equal to empty string
+  const attemptsDisplay = document.querySelector(".attempts");
+  attemptsDisplay.textContent = "";
 }
 
 async function makeGuess() {
@@ -33,13 +41,13 @@ async function makeGuess() {
   const json = await response.json();
   console.log(json);
 
-  let hangmanWord = document.querySelector(".hangman-word");
+  const hangmanWord = document.querySelector(".hangman-word");
   let result = json.hangman;
 
-  let attemptsDisplay = document.querySelector(".attempts");
-  let attemptsSpan = document.createElement("span");
-  let attemptsContent = document.createTextNode(guessLetter);
-  let remainingDisplay = document.querySelector(".remaining");
+  const attemptsDisplay = document.querySelector(".attempts");
+  const attemptsSpan = document.createElement("span");
+  const attemptsContent = document.createTextNode(guessLetter);
+  const remainingDisplay = document.querySelector(".remaining");
 
   if (json.correct === true) {
     const word = result.split("");
