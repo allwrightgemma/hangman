@@ -16,18 +16,23 @@ async function startNewGame() {
   hiddenToken.value = json.token;
   btnNewGame.hidden = true;
   currentAnswer = json.hangman.split("");
+
   const remainingDisplay = document.querySelector(".remaining");
   remainingGuesses = 7;
   remainingDisplay.innerText = remainingGuesses;
+
   const input = document.querySelector(".console");
   input.hidden = false;
+
   const hangmanWord = document.querySelector(".hangman-word");
   currentAnswer = [];
   hangmanWord.textContent = currentAnswer;
 
-  //get attemptDisplay and make equal to empty string
   const attemptsDisplay = document.querySelector(".attempts");
   attemptsDisplay.textContent = "";
+
+  const letterInput = document.getElementById("letter");
+  letterInput.value = "";
 }
 
 async function makeGuess() {
@@ -95,11 +100,9 @@ btnNewGame.addEventListener("click", startNewGame);
 
 btnGuess.addEventListener("click", makeGuess);
 letterInput.addEventListener("keypress", (e) => {
-  if (e.key === "enter") {
+  if (e.key === "Enter") {
     makeGuess();
   }
 });
 
-// want to update the hangman word with the letters
 // continue to add more than one correct or wrong class
-// after 7 guesses display the solution, hide guesses and display new game
