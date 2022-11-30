@@ -11,6 +11,7 @@ header {
   text-align: center;
   background-color: #fdfdfd;
   border-bottom: 1px solid #e5e2e0;
+  padding: 20px 0 15px;
 }
 
 #logo {
@@ -32,29 +33,38 @@ span.error {
 }
 
 #container {
-  width: 1040px;
+  min-width: 540px;
   margin: 0px auto;
   margin-top: 100px;
-  min-height: 750px;
+  min-height: 450px;
 }
 
-input[type='text'] {
+input[type="text"] {
   height: 2.2em;
   font-size: 2em;
   width: 80px;
   text-align: center;
   padding: 5px;
+  border-radius: 4px;
 }
 
 button {
   padding: 10px;
   margin: 10px;
-  border: none;
+  border: solid 2px #e5e2e0;
+  border-radius: 8px;
   font-size: 1.4em;
+  box-shadow: 5px 5px 8px rgba(0, 0, 0, 0.1);
+  transition: background-color 200ms ease-in-out;
+}
+
+button:hover {
+  cursor: pointer;
+  background-color: white;
 }
 
 .correct {
-  color: '#08a932';
+  color: "#08a932";
 }
 
 .wrong {
